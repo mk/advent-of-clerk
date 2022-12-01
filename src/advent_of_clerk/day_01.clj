@@ -10,12 +10,16 @@
 ;; ## Part 1
 (def calories-sums
   (->> (str/split-lines input)
-       (partition-by str/blank?)
-       (filterv #(not= % [""]))
-       (mapv (fn [xs] (mapv #(Integer/parseInt %) xs)))
+       (mapv parse-long)
+       (partition-by nil?)
+       (take-nth 2)
        (map #(reduce + %))))
 
 (reduce max calories-sums)
 
 ;; ## Part 2
-(reduce + (take 3 (reverse (sort calories-sums))))
+(->> calories-sums
+     (sort-by -)
+     (take 3)
+     (reduce +))
+
